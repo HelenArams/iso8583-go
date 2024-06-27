@@ -102,3 +102,44 @@ func appendLength(dst []byte, n, width int) []byte {
 	}
 	return append(dst, buf[:width]...)
 }
+
+// unpack decodes one field from the start of data and returns its value and
+// the number of bytes consumed. Padding of fixed fields is preserved so that
+// packing the result reproduces the input.
+func (fs FieldSpec) unpack(data []byte) (value string, n int, err error) {
+	length := fs.Length
+	if digits := fs.LenType.digits(); digits > 0 {
+		if len(data) < digits {
+			return "", 0, fmt.Errorf("%w: %s prefix needs %d bytes, have %d", ErrTruncated, fs.LenType, digits, len(data))
+		}
+		if length, err = parseLength(data[:digits]); err != nil {
+			return "", 0, err
+		}
+		n = digits
+	}
+
+	width := length
+	if fs.Type == Binary {
+		width *= 2
+	}
+	if len(data) < n+width {
+		return "", 0, fmt.Errorf("%w: field needs %d bytes, have %d", ErrTruncated, width, len(data)-n)
+	}
+	value = string(data[n : n+width])
+	if err := fs.Type.check(value); err != nil {
+		return "", 0, err
+	}
+	return value, n + width, nil
+}
+
+// parseLength parses a zero-padded decimal length prefix.
+func parseLength(prefix []byte) (int, error) {
+	n := 0
+	for _, c := range prefix {
+		if c < '0' || c > '9' {
+			return 0, fmt.Errorf("%w: %q", ErrLengthPrefix, prefix)
+		}
+		n = n*10 + int(c-'0')
+	}
+	return n, nil
+}

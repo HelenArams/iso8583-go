@@ -22,6 +22,10 @@ var (
 	ErrInvalidLength = errors.New("invalid length")
 	// ErrInvalidChar reports a character not allowed by the field type.
 	ErrInvalidChar = errors.New("invalid character")
+	// ErrLengthPrefix reports an LL or LLL prefix that is not numeric.
+	ErrLengthPrefix = errors.New("invalid length prefix")
+	// ErrTrailingData reports bytes left over after the last field.
+	ErrTrailingData = errors.New("trailing data after last field")
 	// ErrTruncated reports input that ends before a message part is complete.
 	ErrTruncated = errors.New("unexpected end of data")
 )

@@ -58,7 +58,7 @@ func decide(req *iso8583.Message) string {
 				return rcFormatError
 			}
 		}
-		if strings.HasSuffix(req.Get(4), declineSuffix) {
+		if declines(req.Get(4)) {
 			return rcDoNotHonor
 		}
 		return rcApproved
@@ -67,6 +67,15 @@ func decide(req *iso8583.Message) string {
 	default:
 		return rcInvalidTransaction
 	}
+}
+
+// declines reports whether amount, in minor units, ends in declineSuffix.
+// Short amounts are padded first so that "5" and "000000000005" agree.
+func declines(amount string) bool {
+	if len(amount) < len(declineSuffix) {
+		amount = strings.Repeat("0", len(declineSuffix)-len(amount)) + amount
+	}
+	return strings.HasSuffix(amount, declineSuffix)
 }
 
 // isAuthorization reports whether mti is an authorization or financial

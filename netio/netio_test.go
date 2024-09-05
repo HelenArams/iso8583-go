@@ -12,7 +12,7 @@ import (
 
 func TestWriteMessageFrame(t *testing.T) {
 	var buf bytes.Buffer
-	if err := WriteMessage(&buf, []byte("0800" + "0000000000000000")); err != nil {
+	if err := WriteMessage(&buf, []byte("0800"+"0000000000000000")); err != nil {
 		t.Fatal(err)
 	}
 	want := "\x00\x14" + "0800" + "0000000000000000"

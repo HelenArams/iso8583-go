@@ -34,9 +34,9 @@ func main() {
 	logger := slog.New(slog.NewTextHandler(os.Stderr, nil))
 
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
-
-	if err := run(ctx, *addr, *idle, logger); err != nil {
+	err := run(ctx, *addr, *idle, logger)
+	stop()
+	if err != nil {
 		logger.Error("server stopped", "err", err)
 		os.Exit(1)
 	}

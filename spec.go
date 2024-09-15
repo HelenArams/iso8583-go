@@ -120,7 +120,7 @@ func (s Spec) Validate() error {
 
 	for _, f := range fields {
 		if err := s[f].validate(); err != nil {
-			return fmt.Errorf("iso8583: field %d: %w: %v", f, ErrInvalidSpec, err)
+			return fmt.Errorf("iso8583: field %d: %w: %w", f, ErrInvalidSpec, err)
 		}
 		if f < 2 || f > MaxField {
 			return fmt.Errorf("iso8583: field %d: %w: number out of range (2..%d)", f, ErrInvalidSpec, MaxField)

@@ -141,6 +141,8 @@ func TestUnpackErrors(t *testing.T) {
 		{"lllvar prefix truncated", "0200" + "0000000000010000" + "01", 48, 20, ErrTruncated, "LLLVAR prefix needs 3 bytes"},
 		{"llvar body truncated", "0200" + "4000000000000000" + "16" + "41111111", 2, 20, ErrTruncated, "field needs 16 bytes, have 8"},
 		{"binary body truncated", "0200" + "0000000000001000" + "0123", 52, 20, ErrTruncated, "field needs 16 bytes, have 4"},
+		{"llvar prefix above max", "0200" + "4000000000000000" + "20" + strings.Repeat("4", 20), 2, 20, ErrInvalidLength, "prefix says 20, maximum is 19"},
+		{"lllvar prefix above max", "0200" + "0000000000000200" + "256" + strings.Repeat("AB", 256), 55, 20, ErrInvalidLength, "prefix says 256, maximum is 255"},
 		{"non-numeric llvar prefix", "0200" + "4000000000000000" + "1A" + "4111111111111111", 2, 20, ErrLengthPrefix, `invalid length prefix: "1A"`},
 		{"space in lllvar prefix", "0200" + "0000000000010000" + " 13" + "hello, world!", 48, 20, ErrLengthPrefix, ""},
 		{"non-numeric in numeric field", "0200" + "2000000000000000" + "00000A", 3, 20, ErrInvalidChar, `'A' at position 5 in Numeric field`},

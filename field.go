@@ -115,6 +115,12 @@ func (fs FieldSpec) unpack(data []byte) (value string, n int, err error) {
 		if length, err = parseLength(data[:digits]); err != nil {
 			return "", 0, err
 		}
+		// The prefix can express more than the spec allows (LL goes to 99,
+		// a PAN stops at 19). Without this check a peer could push an
+		// oversized value through Unpack that Pack would then refuse.
+		if length > fs.Length {
+			return "", 0, fmt.Errorf("%w: prefix says %d, maximum is %d", ErrInvalidLength, length, fs.Length)
+		}
 		n = digits
 	}
 

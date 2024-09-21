@@ -35,6 +35,9 @@ func appendBitmap(dst []byte, fields []int) []byte {
 	return dst
 }
 
+// TODO: some hosts send the bitmap as 8 raw bytes instead of 16 hex chars,
+// would be nice to support that via an option on the spec.
+
 // decodeBitmap parses the bitmap(s) at the start of data and returns the
 // present field numbers in ascending order together with the number of bytes
 // consumed. Bit 1 only announces the secondary bitmap and is not reported as

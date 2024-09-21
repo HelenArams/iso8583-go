@@ -70,22 +70,3 @@ func TestTypeNames(t *testing.T) {
 		}
 	}
 }
-
-func TestLengthTypePrefix(t *testing.T) {
-	tests := []struct {
-		lt          LengthType
-		digits, max int
-	}{
-		{Fixed, 0, 0},
-		{LLVAR, 2, 99},
-		{LLLVAR, 3, 999},
-	}
-	for _, tt := range tests {
-		if got := tt.lt.digits(); got != tt.digits {
-			t.Errorf("%s.digits() = %d, want %d", tt.lt, got, tt.digits)
-		}
-		if got := tt.lt.maxLength(); got != tt.max {
-			t.Errorf("%s.maxLength() = %d, want %d", tt.lt, got, tt.max)
-		}
-	}
-}

@@ -37,8 +37,7 @@ func (t FieldType) check(value string) error {
 	return nil
 }
 
-// units returns the length of value in the unit the spec counts: bytes for
-// Binary fields, characters otherwise.
+// Binary lengths are in bytes, everything else in characters.
 func (fs FieldSpec) units(value string) int {
 	if fs.Type == Binary {
 		return len(value) / 2
@@ -93,7 +92,6 @@ func (fs FieldSpec) pack(dst []byte, value string) ([]byte, error) {
 	return append(dst, value...), nil
 }
 
-// appendLength appends n as a zero-padded decimal of the given width.
 func appendLength(dst []byte, n, width int) []byte {
 	var buf [3]byte
 	for i := width - 1; i >= 0; i-- {
@@ -138,7 +136,6 @@ func (fs FieldSpec) unpack(data []byte) (value string, n int, err error) {
 	return value, n + width, nil
 }
 
-// parseLength parses a zero-padded decimal length prefix.
 func parseLength(prefix []byte) (int, error) {
 	n := 0
 	for _, c := range prefix {

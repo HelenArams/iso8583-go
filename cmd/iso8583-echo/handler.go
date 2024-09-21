@@ -78,8 +78,6 @@ func declines(amount string) bool {
 	return strings.HasSuffix(amount, declineSuffix)
 }
 
-// isAuthorization reports whether mti is an authorization or financial
-// message, the classes that carry an authorization code when approved.
 func isAuthorization(mti string) bool {
 	return mti[1] == '1' || mti[1] == '2'
 }

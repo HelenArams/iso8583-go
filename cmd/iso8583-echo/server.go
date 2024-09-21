@@ -72,7 +72,6 @@ func (s *server) serve(ctx context.Context, ln net.Listener) error {
 	}
 }
 
-// closeAll closes every open connection, which unblocks their handlers.
 func (s *server) closeAll() {
 	s.mu.Lock()
 	defer s.mu.Unlock()
@@ -81,7 +80,6 @@ func (s *server) closeAll() {
 	}
 }
 
-// release forgets conn and closes it.
 func (s *server) release(conn net.Conn) {
 	s.mu.Lock()
 	delete(s.conns, conn)
@@ -133,7 +131,6 @@ func (s *server) handle(conn net.Conn) {
 	}
 }
 
-// authCode returns the next six-digit authorization identification response.
 func (s *server) authCode() string {
 	return fmt.Sprintf("%06d", s.seq.Add(1)%1_000_000)
 }

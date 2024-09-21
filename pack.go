@@ -43,7 +43,6 @@ func Pack(msg *Message, spec Spec) ([]byte, error) {
 	return out, nil
 }
 
-// isMTI reports whether s is a four-digit message type indicator.
 func isMTI(s string) bool {
 	return len(s) == mtiLen && Numeric.check(s) == nil
 }

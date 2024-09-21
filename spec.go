@@ -65,7 +65,6 @@ func (l LengthType) String() string {
 	return fmt.Sprintf("LengthType(%d)", uint8(l))
 }
 
-// digits returns the number of digits in the length prefix, 0 for Fixed.
 func (l LengthType) digits() int {
 	switch l {
 	case LLVAR:
@@ -77,7 +76,6 @@ func (l LengthType) digits() int {
 	}
 }
 
-// maxLength returns the largest length the prefix can express.
 func (l LengthType) maxLength() int {
 	switch l {
 	case LLVAR:
